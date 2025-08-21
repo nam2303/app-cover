@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cổ phiếu</title>
+    <link rel="stylesheet" href="Home.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Login styles */
+      .login-container {
+        max-width: 480px;
+        margin: 0 auto;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 2rem;
+      }
+
+      .login-form {
+        width: 100%;
+        max-width: 350px;
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .login-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .login-header p {
+        color: #666;
+        font-size: 0.95rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 0.875rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #7a32dc;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 1rem;
+        background-color: #7a32dc;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .login-btn:hover {
+        background-color: #6a2bb8;
+      }
+
+      .error-message {
+        background-color: #fef2f2;
+        color: #dc3545;
+        padding: 0.75rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-size: 0.9rem;
+        display: none;
+      }
+
+      /* Stock input form styles */
+      .stock-input-section {
+        background-color: #f8f9fa;
+        padding: 2rem 1rem;
+        min-height: 100vh;
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .stock-input-form {
+        background-color: #fff;
+        margin: 0 auto;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border: 2px solid #e9e0f8;
+        max-width: 480px;
+      }
+
+      .form-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #7a32dc;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .input-row {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .input-group {
+        margin-bottom: 1.2rem;
+      }
+
+      .input-group label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      .input-group input {
+        padding: 0.875rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+        transition: border-color 0.3s ease;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #7a32dc;
+      }
+
+      .add-stock-btn {
+        width: 100%;
+        padding: 1rem;
+        background-color: #7a32dc;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+      }
+
+      .add-stock-btn:hover {
+        background-color: #6a2bb8;
+      }
+
+      /* Main app styles */
+      .main-app {
+        display: none;
+        height: 100vh;
+        overflow-y: auto;
+        scroll-snap-type: y mandatory;
+      }
+
+      .app-section {
+        min-height: 100vh;
+        scroll-snap-align: start;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stock-input-section {
+        background-color: #f8f9fa;
+        padding: 2rem 1rem;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 50vh; /* Add space between input and display sections */
+      }
+
+      .stock-display-section {
+        background-color: #fff;
+        flex: 1;
+      }
+
+      /* Hide initially */
+      .main-app {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+      <div class="login-form">
+        <div class="login-header">
+          <h1>Đăng nhập</h1>
+          <p>Vui lòng đăng nhập để tiếp tục</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+          Sai tên tài khoản hoặc mật khẩu
+        </div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">Tên tài khoản</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+
+          <button type="submit" class="login-btn">Đăng nhập</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="main-app" id="mainApp">
+      <!-- Stock Input Section -->
+      <div class="app-section stock-input-section" id="stockInputSection">
+        <div class="stock-input-form">
+          <h3 class="form-title">Thêm mã cổ phiếu mới</h3>
+          <form id="stockForm">
+            <div class="input-group">
+              <label for="stockCode">Mã cổ phiếu</label>
+              <input type="text" id="stockCode" name="stockCode" placeholder="VD: VCB" required>
+            </div>
+
+            <div class="input-group">
+              <label for="buyPrice">Giá mua</label>
+              <input type="number" id="buyPrice" name="buyPrice" step="0.01" placeholder="0.00" required>
+            </div>
+
+            <div class="input-group">
+              <label for="marketPrice">Giá thị trường</label>
+              <input type="number" id="marketPrice" name="marketPrice" step="0.01" placeholder="0.00" required>
+            </div>
+
+            <div class="input-group">
+              <label for="referencePrice">Giá tham chiếu</label>
+              <input type="number" id="referencePrice" name="referencePrice" step="0.01" placeholder="0.00" required>
+            </div>
+
+            <div class="input-group">
+              <label for="volume">Khối lượng</label>
+              <input type="number" id="volume" name="volume" placeholder="0" required>
+            </div>
+
+            <button type="submit" class="add-stock-btn">Thêm cổ phiếu</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Stock Display Section -->
+      <div class="app-section stock-display-section" id="stockDisplaySection">
+        <div class="container">
+          <section class="header">
+            <img src="./icons/back-icon.svg" alt="" />
+            <div class="title">Cổ phiếu</div>
+            <img src="./icons/Search-icon.svg" alt="" />
+          </section>
+          <section class="tab">
+            <div class="tab-account">Tài khoản <span class="number-one">1</span></div>
+            <div class="tab-account">Tài khoản <span class="number-three">3</span></div>
+            <div class="highline">Tài khoản <span class="number-six">6</span></div>
+          </section>
+          <section>
+            <div class="rectangle">
+              <img src="icons/rectangle-icon.svg" alt="" />
+            </div>
+            <div class="structure">
+              <span class="label">Danh mục nắm giữ</span>
+              <span class="value menu-item">Cơ cấu danh mục</span>
+            </div>
+            <div class="info">
+              <div>
+                <span class="label"
+                  >Lãi lỗ danh mục <img src="icons/eye-icon.svg" alt="" /></span
+                ><span class="value benefit-today" id="portfolioPL"
+                  >+0
+                  <span class="discount"><span id="portfolioPLPercent">+0.00%</span></span></span
+                >
+              </div>
+              <div>
+                <span class="label"
+                  >Lãi/Lỗ hôm nay <img src="icons/Info-icon.svg" alt="" /></span
+                ><span class="value" id="dailyPL">0</span>
+              </div>
+              <div>
+                <span class="label"
+                  >Tổng vốn <img src="icons/Info-icon.svg" alt="" /></span
+                ><span class="value" id="totalCost">0</span>
+              </div>
+              <div>
+                <span class="label">Tổng giá trị thị trường</span
+                ><span class="value" id="totalMarketValue">0</span>
+              </div>
+            </div>
+          </section>
+
+          <div class="stock-header">
+            <div class="estimate-button">
+             <div id="input-checkbox" style="justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+                <div style="width: 16.80px; height: 16.80px; background: #F6F5FB; border-radius: 4px; border: 1px #E1E1E1 solid"></div>
+                </div>
+              <span>Ẩn khối lượng</span>
+            </div>
+            <button class="sell-button">Bán nhiều mã</button>
+          </div>
+          <div class="stock-container">
+            <div class="stock-table-container">
+              <table class="stock-table">
+                <thead>
+                  <tr>
+                    <th>MÃ CP</th>
+                    <th>GIÁ VỐN</th>
+                    <th>GIÁ TT</th>
+                    <th>KL <img src="icons/tabler_caret-up-down-filled.png" alt="" /></th>
+                    <th>LÃI/LỖ</th>
+                  </tr>
+                </thead>
+                <tbody id="stockTableBody">
+                  <!-- Dynamic stock rows will be added here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-menu">
+          <div class="buttons" id="bottom-buttons">
+            <button class="buy">MUA</button>
+            <button class="sell">BÁN</button>
+          </div>
+
+          <div class="menu-items">
+            <a href="#" class="menu-item" style="color: #7a32dc"
+              ><span class="icon"><img src="icons/Home-icon.svg" alt="" /></span>
+              Trang chủ</a
+            >
+            <a href="#" class="menu-item"
+              ><span class="icon"><img src="icons/Chart-icon.svg" alt="" /></span> Thị
+              trường</a
+            >
+            <a href="#" class="menu-item"
+              ><span class="icon"><img src="icons/Gavel-icon.svg" alt="" /></span>
+              Giao dịch</a
+            >
+            <a href="#" class="menu-item"
+              ><span class="icon"><img src="icons/Cube-icon.svg" alt="" /></span> Tài
+              sản</a
+            >
+            <a href="#" class="menu-item"
+              ><span class="icon"><img src="icons/Frame 6.png" alt="" /></span> Tất
+              cả</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Stock data array
+      let stocks = [];
+
+      // Login form handler
+      document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Hard-coded credentials
+        if (username === 'admin' && password === 'tool@2025') {
+          // Login successful
+          document.getElementById('loginContainer').style.display = 'none';
+          document.getElementById('mainApp').style.display = 'block';
+          errorMessage.style.display = 'none';
+        } else {
+          // Login failed
+          errorMessage.style.display = 'block';
+          document.getElementById('username').value = '';
+          document.getElementById('password').value = '';
+        }
+      });
+
+      // Calculate cost price (Giá vốn) = Buy price * 1.001, rounded to 2 decimal places
+      function calculateCostPrice(buyPrice) {
+        const costPrice = buyPrice * 1.001;
+        return Math.round(costPrice * 100) / 100;
+      }
+
+      // Calculate profit/loss percentage with custom rounding rules
+      function calculatePLPercentage(buyPrice, marketPrice) {
+        const costPriceUnrounded = buyPrice * 1.0015;
+        const plPercentage = ((marketPrice - costPriceUnrounded) / costPriceUnrounded) * 100;
+
+        // Custom rounding: if 3rd decimal is 0, keep 2 decimals; if >0, round up
+        const plString = plPercentage.toFixed(3);
+        const thirdDecimal = parseInt(plString.charAt(plString.length - 1));
+
+        if (thirdDecimal === 0) {
+          return parseFloat(plPercentage.toFixed(2));
+        } else {
+          // Round up: increase the second decimal by 1
+          const rounded = Math.ceil(plPercentage * 100) / 100;
+          return rounded;
+        }
+      }
+
+      // Calculate portfolio summary
+      function calculatePortfolioSummary() {
+        let totalCost = 0;
+        let totalMarketValue = 0;
+        let dailyPL = 0;
+
+        stocks.forEach(stock => {
+          // Convert prices to VND by multiplying by 1000
+          const buyPriceVND = stock.buyPrice * 1000;
+          const marketPriceVND = stock.marketPrice * 1000;
+          const referencePriceVND = stock.referencePrice * 1000;
+
+          const costValue = buyPriceVND * stock.volume;
+          const marketValue = marketPriceVND * stock.volume;
+          const dailyChange = (marketPriceVND - referencePriceVND) * stock.volume;
+
+          totalCost += costValue;
+          totalMarketValue += marketValue;
+          dailyPL += dailyChange;
+        });
+
+        const portfolioPL = totalMarketValue - totalCost;
+        const portfolioPLPercentage = totalCost > 0 ? Math.round((portfolioPL / totalCost * 100) * 100) / 100 : 0;
+
+        return {
+          totalCost,
+          totalMarketValue,
+          portfolioPL,
+          portfolioPLPercentage,
+          dailyPL
+        };
+      }
+
+      // Format number with thousand separators for summary (using comma)
+      function formatNumberSummary(num) {
+        return new Intl.NumberFormat('en-US').format(Math.round(num));
+      }
+
+      // Format number with thousand separators for table volume (using comma)
+      function formatNumberVolume(num) {
+        return new Intl.NumberFormat('en-US').format(Math.round(num));
+      }
+
+      // Format number with thousand separators for table (using dot) - not used anymore
+      function formatNumber(num) {
+        return new Intl.NumberFormat('vi-VN').format(Math.round(num));
+      }
+
+      // Update portfolio summary display
+      function updatePortfolioSummary() {
+        const summary = calculatePortfolioSummary();
+
+        // Update portfolio P&L
+        const portfolioPLElement = document.getElementById('portfolioPL');
+        const portfolioPLPercentElement = document.getElementById('portfolioPLPercent');
+        const isPositive = summary.portfolioPL >= 0;
+
+        portfolioPLElement.innerHTML = `${isPositive ? '+' : ''}${formatNumberSummary(summary.portfolioPL)}
+          <span class="discount"><span id="portfolioPLPercent">${isPositive ? '+' : ''}${summary.portfolioPLPercentage.toFixed(2)}%</span></span>`;
+
+        if (isPositive) {
+          portfolioPLElement.className = 'value benefit-today';
+        } else {
+          portfolioPLElement.className = 'value';
+          portfolioPLElement.style.color = '#DC383F';
+        }
+
+        // Update daily P&L
+        const dailyPLElement = document.getElementById('dailyPL');
+        const isDailyPositive = summary.dailyPL >= 0;
+        dailyPLElement.textContent = `${isDailyPositive ? '+' : ''}${formatNumberSummary(summary.dailyPL)}`;
+        dailyPLElement.style.color = isDailyPositive ? '#00AD53' : '#DC383F';
+
+        // Update total cost
+        document.getElementById('totalCost').textContent = formatNumberSummary(summary.totalCost);
+
+        // Update total market value
+        document.getElementById('totalMarketValue').textContent = formatNumberSummary(summary.totalMarketValue);
+      }
+
+      // Render stock table
+      function renderStockTable() {
+        const tableBody = document.getElementById('stockTableBody');
+        tableBody.innerHTML = '';
+
+        stocks.forEach((stock, index) => {
+          const costPrice = calculateCostPrice(stock.buyPrice);
+          const plPercentage = calculatePLPercentage(stock.buyPrice, stock.marketPrice);
+          const isPositive = plPercentage >= 0;
+
+          const row = document.createElement('tr');
+          row.className = 'stock-row';
+          row.innerHTML = `
+            <td class="stock-symbol ${isPositive ? 'positive' : 'negative'}">
+              ${stock.code}
+              <img src="icons/Downline-icon.png" alt="">
+            </td>
+            <td class="price">${costPrice.toFixed(2)}</td>
+            <td class="price">${stock.marketPrice.toFixed(2)}</td>
+            <td class="volume">${formatNumberVolume(stock.volume)}</td>
+            <td class="change ${isPositive ? 'positive' : 'negative'}">
+              ${isPositive ? '+' : ''}${plPercentage.toFixed(2)}%
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        updatePortfolioSummary();
+      }
+
+      // Add stock form handler
+      document.getElementById('stockForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        const newStock = {
+          code: formData.get('stockCode').toUpperCase(),
+          buyPrice: parseFloat(formData.get('buyPrice')),
+          marketPrice: parseFloat(formData.get('marketPrice')),
+          referencePrice: parseFloat(formData.get('referencePrice')),
+          volume: parseInt(formData.get('volume'))
+        };
+
+        stocks.push(newStock);
+        renderStockTable();
+
+        // Reset form
+        e.target.reset();
+
+        // Scroll to stock display section
+        document.getElementById('stockDisplaySection').scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+
+      function openCity(cityName) {
+        var i;
+        var x = document.getElementsByClassName("city");
+        for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+        }
+        document.getElementById(cityName).style.display = "block";
+      }
+    </script>
+  </body>
+</html>

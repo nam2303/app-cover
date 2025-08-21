@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cổ phiếu</title>
+    <link rel="stylesheet" href="Home.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <section class="header">
+        <img src="./icons/back-icon.svg" alt="" />
+        <div class="title">Cổ phiếu</div>
+        <img src="./icons/Search-icon.svg" alt="" />
+      </section>
+      <section class="tab">
+        <div>Tài khoản <span class="number-one">1</span></div>
+        <div class="highline">Tài khoản <span class="number-six">6</span></div>
+      </section>
+      <section>
+        <div class="rectangle">
+          <img src="icons/rectangle-icon.svg" alt="" />
+        </div>
+        <div class="structure">
+          <span class="label">Danh mục nắm giữ</span
+          ><span class="value">Cơ cấu danh mục</span>
+        </div>
+        <div class="info">
+          <div>
+            <span class="label"
+              >Lãi/đổ hôm nay <img src="icons/eye-icon.svg" alt="" /></span
+            ><span class="value"
+              >+1,622,516
+              <span class="discount"><span>+3.17%</span></span></span
+            >
+          </div>
+          <div>
+            <span class="label"
+              >Lãi/Lỗ hôm nay <img src="icons/Info-icon.svg" alt="" /></span
+            ><span class="value">0</span>
+          </div>
+          <div>
+            <span class="label"
+              >Tổng vốn <img src="icons/Info-icon.svg" alt="" /></span
+            ><span class="value">51,260,684</span>
+          </div>
+          <div>
+            <span class="label">Tổng giá trị thực</span
+            ><span class="value">52,883,200</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="stock-header">
+        <div class="estimate-button">
+          <input type="checkbox" name="" id="" />
+          <span>Ẩn khối lượng</span>
+        </div>
+        <button class="sell-button">Bán nhiều mã</button>
+      </div>
+      <div class="stock-container">
+        <table class="stock-table">
+          <thead>
+            <tr>
+              <th>MÃ CP</th>
+              <th>GIÁ VỐN</th>
+              <th>GIÁ TT</th>
+              <th>KL</th>
+              <th>LÃI/LỖ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="stock-row">
+              <td class="stock-symbol hag">
+                HAG
+                <div class="dropdown-icon"></div>
+              </td>
+              <td class="price">14.96</td>
+              <td class="price">14.50</td>
+              <td class="volume">700</td>
+              <td class="change negative">-3.06%</td>
+            </tr>
+            <tr class="stock-row">
+              <td class="stock-symbol evf">
+                EVF
+                <div class="dropdown-icon"></div>
+              </td>
+              <td class="price">11.92</td>
+              <td class="price">13.15</td>
+              <td class="volume">1,000</td>
+              <td class="change positive">+10.34%</td>
+            </tr>
+            <tr class="stock-row">
+              <td class="stock-symbol vci">
+                VCI
+                <div class="dropdown-icon"></div>
+              </td>
+              <td class="price">43.22</td>
+              <td class="price">41.60</td>
+              <td class="volume volume-zero">0</td>
+              <td class="change negative">-3.74%</td>
+            </tr>
+            <tr class="stock-row">
+              <td class="stock-symbol vgs">
+                VGS
+                <div class="dropdown-icon"></div>
+              </td>
+              <td class="price">25.27</td>
+              <td class="price">31.70</td>
+              <td class="volume volume-zero">0</td>
+              <td class="change positive">+25.43%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="buttons">
+        <button class="buy">MUA</button>
+        <button class="sell">BÁN</button>
+      </div>
+    </div>
+    <div class="bottom-menu">
+      <a href="#" class="menu-item" style="color: #7a32dc"
+        ><span class="icon"><img src="icons/Home-icon.svg" alt="" /></span>
+        Trang chủ</a
+      >
+      <a href="#" class="menu-item"
+        ><span class="icon"><img src="icons/Chart-icon.svg" alt="" /></span> Thị
+        trường</a
+      >
+      <a href="#" class="menu-item"
+        ><span class="icon"><img src="icons/Gavel-icon.svg" alt="" /></span>
+        Giao dịch</a
+      >
+      <a href="#" class="menu-item"
+        ><span class="icon"><img src="icons/Cube-icon.svg" alt="" /></span> Tài
+        sản</a
+      >
+      <a href="#" class="menu-item"
+        ><span class="icon"><img src="icons/Frame 6.svg" alt="" /></span> Tất
+        cả</a
+      >
+    </div>
+
+    <script>
+      function openCity(cityName) {
+        var i;
+        var x = document.getElementsByClassName("city");
+        for (i = 0; i < x.length; i++) {
+          x[i].style.display = "none";
+        }
+        document.getElementById(cityName).style.display = "block";
+      }
+    </script>
+  </body>
+</html>
