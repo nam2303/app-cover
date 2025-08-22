@@ -168,23 +168,7 @@
         border-color: #7a32dc;
       }
 
-      .add-stock-btn {
-        width: 100%;
-        padding: 1rem;
-        background-color: #7a32dc;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        margin-top: 1rem;
-        transition: background-color 0.3s ease;
-      }
 
-      .add-stock-btn:hover {
-        background-color: #6a2bb8;
-      }
 
       /* Main app styles */
       .main-app {
@@ -281,7 +265,11 @@
               <input type="number" id="volume" name="volume" placeholder="0" required>
             </div>
 
-            <button type="submit" class="add-stock-btn">Thêm cổ phiếu</button>
+            <div style="text-align: center; margin-top: 1rem; color: #666; font-size: 0.9rem;">
+              Nhấn Enter hoặc click nút "THÊM CP" bên dưới để thêm cổ phiếu
+            </div>
+
+
           </form>
         </div>
       </div>
@@ -364,7 +352,7 @@
 
         <div class="bottom-menu">
           <div class="buttons" id="bottom-buttons">
-            <button class="buy">MUA</button>
+            <button class="buy" id="buyButton">MUA</button>
             <button class="sell">BÁN</button>
           </div>
 
@@ -554,30 +542,116 @@
         updatePortfolioSummary();
       }
 
-      // Add stock form handler
-      document.getElementById('stockForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+      // Function to add stock (extracted from form handler)
+      function addStock() {
+        const stockCode = document.getElementById('stockCode').value;
+        const buyPrice = document.getElementById('buyPrice').value;
+        const marketPrice = document.getElementById('marketPrice').value;
+        const referencePrice = document.getElementById('referencePrice').value;
+        const volume = document.getElementById('volume').value;
 
-        const formData = new FormData(e.target);
+        // Validate required fields
+        if (!stockCode || !buyPrice || !marketPrice || !referencePrice || !volume) {
+          alert('Vui lòng điền đầy đủ thông tin!');
+          return;
+        }
+
         const newStock = {
-          code: formData.get('stockCode').toUpperCase(),
-          buyPrice: parseFloat(formData.get('buyPrice')),
-          marketPrice: parseFloat(formData.get('marketPrice')),
-          referencePrice: parseFloat(formData.get('referencePrice')),
-          volume: parseInt(formData.get('volume'))
+          code: stockCode.toUpperCase(),
+          buyPrice: parseFloat(buyPrice),
+          marketPrice: parseFloat(marketPrice),
+          referencePrice: parseFloat(referencePrice),
+          volume: parseInt(volume)
         };
 
         stocks.push(newStock);
         renderStockTable();
 
         // Reset form
-        e.target.reset();
+        document.getElementById('stockForm').reset();
+
+        // Reset buy button text back to "MUA"
+        updateBuyButtonText();
 
         // Scroll to stock display section
         document.getElementById('stockDisplaySection').scrollIntoView({
           behavior: 'smooth'
         });
+      }
+
+      // Add stock form handler
+      document.getElementById('stockForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        addStock();
       });
+
+      // Check if form has data
+      function hasFormData() {
+        const stockCode = document.getElementById('stockCode').value.trim();
+        const buyPrice = document.getElementById('buyPrice').value.trim();
+        const marketPrice = document.getElementById('marketPrice').value.trim();
+        const referencePrice = document.getElementById('referencePrice').value.trim();
+        const volume = document.getElementById('volume').value.trim();
+
+        return stockCode && buyPrice && marketPrice && referencePrice && volume;
+      }
+
+      // Update buy button text based on form data
+      function updateBuyButtonText() {
+        const buyButton = document.getElementById('buyButton');
+        if (hasFormData()) {
+          buyButton.textContent = 'THÊM CP';
+          buyButton.style.backgroundColor = '#7a32dc';
+        } else {
+          buyButton.textContent = 'MUA';
+          buyButton.style.backgroundColor = '#00ad53';
+        }
+      }
+
+      // Buy button handler
+      document.getElementById('buyButton').addEventListener('click', function() {
+        // If form has data, add stock
+        if (hasFormData()) {
+          addStock();
+        } else {
+          // Otherwise, scroll to stock input section
+          document.getElementById('stockInputSection').scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+
+      // Add keyboard event listeners for Enter key on all form inputs
+      const formInputs = ['stockCode', 'buyPrice', 'marketPrice', 'referencePrice', 'volume'];
+      formInputs.forEach(inputId => {
+        const inputElement = document.getElementById(inputId);
+
+        // Enter key handler
+        inputElement.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            if (hasFormData()) {
+              addStock();
+            } else {
+              // Focus next input if current is filled
+              const currentValue = this.value.trim();
+              if (currentValue) {
+                const currentIndex = formInputs.indexOf(inputId);
+                if (currentIndex < formInputs.length - 1) {
+                  document.getElementById(formInputs[currentIndex + 1]).focus();
+                }
+              }
+            }
+          }
+        });
+
+        // Update button text when input changes
+        inputElement.addEventListener('input', updateBuyButtonText);
+        inputElement.addEventListener('blur', updateBuyButtonText);
+      });
+
+      // Initialize button text on page load
+      setTimeout(updateBuyButtonText, 100);
 
       function openCity(cityName) {
         var i;
