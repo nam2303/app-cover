@@ -1,3 +1,20 @@
+* {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+html, body {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+  -webkit-tap-highlight-color: transparent;
+}
+
 body {
   font-family: "Inter";
 }
